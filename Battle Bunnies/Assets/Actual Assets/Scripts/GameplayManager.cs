@@ -38,6 +38,29 @@ public class GameplayManager : MonoBehaviour
         }
     }
 
+    class PlayableMonster
+    {
+        public Monster monster;
+        public int id;
+        public GameObject sceneObject;
+        public bool isSpawned;
+
+        public PlayableMonster(Monster monster, int id, GameObject sceneObject = null)
+        {
+            this.monster = monster;
+            this.id = id;
+            this.sceneObject = sceneObject;
+            isSpawned = false;
+        }
+    }
+
+    // --------------------------------------------------------------------------------------------------------------------------- //
+
+    int currentTurnId = 0;
+    bool gameOver = false;
+
+    public GameObject[] monsterSceneObjects;
+
     PlayableMonster[] monsters =
     {
         new PlayableMonster(
@@ -57,28 +80,12 @@ public class GameplayManager : MonoBehaviour
             0)
     };
 
-    class PlayableMonster
-    {
-        public Monster monster;
-        public int id;
-        public bool isSpawned;
-
-        public PlayableMonster(Monster monster, int id)
-        {
-            this.monster = monster;
-            this.id = id;
-            isSpawned = false;
-        }
-    }
-
-    // --------------------------------------------------------------------------------------------------------------------------- //
-
-    int currentTurnId = 0;
-    bool gameOver = false;
-
     public void Start()
     {
-        
+        for (int i = 0; i < monsters.Length && i < monsterSceneObjects.Length; i++) {
+            monsters[i].sceneObject = monsterSceneObjects[i];
+            SetupSceneObject(monsters[i].sceneObject);
+        }
     }
 
     public void Update()
@@ -98,6 +105,11 @@ public class GameplayManager : MonoBehaviour
         return null;
     }
 
+    private void SetupSceneObject(GameObject sceneObject)
+    {
+        // TODO: Implement
+    }
+
     public void SpawnMonster(int id)
     {
         PlayableMonster m = FindMonster(id);
@@ -105,6 +117,11 @@ public class GameplayManager : MonoBehaviour
         if (m != null) {
             m.isSpawned = true;
         }
+    }
+
+    public void PlayerMonsterAttack(int abilityIndex)
+    {
+        MonsterAttack(0, abilityIndex);
     }
 
     public void MonsterAttack(int id, int abilityIndex)
@@ -116,7 +133,7 @@ public class GameplayManager : MonoBehaviour
         PlayableMonster m = FindMonster(id);
 
         if (m != null && m.isSpawned) {
-            PlayableMonster target = monsters[(id + 1) % 2];
+            PlayableMonster target = monsters[(id + 1) % monsters.Length];
             
             Ability usedAbility = m.monster.abilities[abilityIndex];
             bool attackSuccess = Random.Range(1, 100) < usedAbility.hitPercent;
@@ -124,6 +141,7 @@ public class GameplayManager : MonoBehaviour
             if (attackSuccess) {
                 float damageMultiplier = Random.Range(1, 100) < usedAbility.critChance ? 1.5f : 1.0f;
                 target.monster.hp -= (int)(usedAbility.damage * damageMultiplier);
+                target.sceneObject.GetComponent<BunnyBehaviour>().PlayAnimation(2);
 
                 if (target.monster.hp <= 0) {
                     target.monster.hp = 0;
@@ -131,14 +149,15 @@ public class GameplayManager : MonoBehaviour
                 }
             }
 
-            currentTurnId = target.id;
+            //currentTurnId = target.id;
+            m.sceneObject.GetComponent<BunnyBehaviour>().PlayAnimation(1);
         }
     }
 
     private void MonsterKill(int id)
     {
         // Play death animation - include despawn functionaility in monster script.
-
+        monsters[id].sceneObject.GetComponent<BunnyBehaviour>().Die();
         gameOver = true;
     }
 }

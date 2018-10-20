@@ -5,6 +5,7 @@ using UnityEngine;
 public class BunnyBehaviour : MonoBehaviour
 {
     public Texture2D eggTexture;
+    public HealthBarBehaviour healthBar;
 
     private GameObject preSpawn;
     private GameObject postSpawn;

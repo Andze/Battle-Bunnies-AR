@@ -151,8 +151,7 @@ public class GameplayManager : MonoBehaviour
                 float damageMultiplier = Random.Range(1, 100) <= usedAbility.critChance ? 1.5f : 1.0f;
                 target.monster.hp -= (int)(usedAbility.damage * damageMultiplier);
                 target.sceneObject.GetComponent<BunnyBehaviour>().PlayAnimation(2, 0.75f);
-
-                Debug.Log(target.id + ", hp: " + target.monster.hp);
+                target.sceneObject.GetComponent<BunnyBehaviour>().healthBar.UpdateVisuals(target.monster.hp);
 
                 if (target.monster.hp <= 0) {
                     target.monster.hp = 0;

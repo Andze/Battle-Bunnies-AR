@@ -50,7 +50,7 @@ public class GameplayManager : MonoBehaviour
             this.monster = monster;
             this.id = id;
             this.sceneObject = sceneObject;
-            isSpawned = false;
+            isSpawned = true;
         }
     }
 
@@ -65,10 +65,10 @@ public class GameplayManager : MonoBehaviour
     {
         new PlayableMonster(
             new Monster("Volcanic Bunny", 100,
-            new Ability("Normal Ability 1", Ability.Type.Normal, 10, 100, 33),
-            new Ability("Normal Ability 2", Ability.Type.Normal, 20, 66, 20),
-            new Ability("Fire Ability 1", Ability.Type.Fire, 15, 75, 33),
-            new Ability("Fire Ability 2", Ability.Type.Fire, 50, 20, 20)),
+            new Ability("Kick", Ability.Type.Normal, 10, 100, 33),
+            new Ability("Headbutt", Ability.Type.Normal, 20, 66, 20),
+            new Ability("Ember", Ability.Type.Fire, 15, 75, 33),
+            new Ability("Flamethrower", Ability.Type.Fire, 50, 20, 20)),
             0),
 
         new PlayableMonster(
@@ -77,7 +77,7 @@ public class GameplayManager : MonoBehaviour
             new Ability("Normal Ability 2", Ability.Type.Normal, 20, 66, 20),
             new Ability("Water Ability 1", Ability.Type.Fire, 15, 75, 33),
             new Ability("Water Ability 2", Ability.Type.Fire, 50, 20, 20)),
-            0)
+            1)
     };
 
     public void Start()
@@ -86,6 +86,9 @@ public class GameplayManager : MonoBehaviour
             monsters[i].sceneObject = monsterSceneObjects[i];
             SetupSceneObject(monsters[i].sceneObject);
         }
+
+        SpawnMonster(0);
+        SpawnMonster(1);
     }
 
     public void Update()
@@ -98,8 +101,9 @@ public class GameplayManager : MonoBehaviour
     private PlayableMonster FindMonster(int id)
     {
         for (int i = 0; i < monsters.Length; i++) {
-            if (monsters[i].id == id)
+            if (monsters[i].id == id) {
                 return monsters[i];
+            }
         }
 
         return null;
@@ -116,6 +120,10 @@ public class GameplayManager : MonoBehaviour
 
         if (m != null) {
             m.isSpawned = true;
+
+            if (m.sceneObject != null) {
+                m.sceneObject.GetComponent<BunnyBehaviour>().PlayAnimation(0);
+            }
         }
     }
 
@@ -132,32 +140,44 @@ public class GameplayManager : MonoBehaviour
 
         PlayableMonster m = FindMonster(id);
 
-        if (m != null && m.isSpawned) {
+        if (m != null && m.isSpawned && m.monster.hp != 0) {
             PlayableMonster target = monsters[(id + 1) % monsters.Length];
             
             Ability usedAbility = m.monster.abilities[abilityIndex];
-            bool attackSuccess = Random.Range(1, 100) < usedAbility.hitPercent;
+            bool attackSuccess = Random.Range(1, 100) <= usedAbility.hitPercent;
+            m.sceneObject.GetComponent<BunnyBehaviour>().PlayAnimation(1);
 
             if (attackSuccess) {
-                float damageMultiplier = Random.Range(1, 100) < usedAbility.critChance ? 1.5f : 1.0f;
+                float damageMultiplier = Random.Range(1, 100) <= usedAbility.critChance ? 1.5f : 1.0f;
                 target.monster.hp -= (int)(usedAbility.damage * damageMultiplier);
-                target.sceneObject.GetComponent<BunnyBehaviour>().PlayAnimation(2);
+                target.sceneObject.GetComponent<BunnyBehaviour>().PlayAnimation(2, 0.75f);
+
+                Debug.Log(target.id + ", hp: " + target.monster.hp);
 
                 if (target.monster.hp <= 0) {
                     target.monster.hp = 0;
-                    MonsterKill(id);
+                    MonsterKill(target.id);
                 }
             }
 
-            //currentTurnId = target.id;
-            m.sceneObject.GetComponent<BunnyBehaviour>().PlayAnimation(1);
+            currentTurnId = target.id;
+
+            if (currentTurnId != 0) {
+                StartCoroutine(AttackAfterDelay(currentTurnId, 3.0f));
+            }
         }
+    }
+
+    private IEnumerator AttackAfterDelay(int id, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        MonsterAttack(id, Random.Range(0, monsters[id].monster.abilities.Length - 1));
+        yield return null;
     }
 
     private void MonsterKill(int id)
     {
-        // Play death animation - include despawn functionaility in monster script.
-        monsters[id].sceneObject.GetComponent<BunnyBehaviour>().Die();
+        StartCoroutine(monsters[id].sceneObject.GetComponent<BunnyBehaviour>().Die(2.0f));
         gameOver = true;
     }
 }

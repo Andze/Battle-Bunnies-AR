@@ -33,29 +33,51 @@ public class BunnyBehaviour : MonoBehaviour
         postSpawn.SetActive(false);
     }
     
-    public void PlayAnimation(int animationIndex)
+    public void PlayAnimation(int animationIndex, float delay = 0.0f)
     {
         if (bunnyAnimator != null) {
             switch (animationIndex) {
                 case 0:
                     preSpawn.SetActive(false);
                     postSpawn.SetActive(true);
-                    bunnyAnimator.SetTrigger("bunny_spawn");
+
+                    if (delay == 0.0f) {
+                        bunnyAnimator.SetTrigger("bunny_spawn");
+                    } else {
+                        StartCoroutine(DelayAnimation(delay, "bunny_spawn"));
+                    }
                     break;
 
                 case 1:
-                    bunnyAnimator.SetTrigger("bunny_attack");
+                    if (delay == 0.0f) {
+                        bunnyAnimator.SetTrigger("bunny_attack");
+                    } else {
+                        StartCoroutine(DelayAnimation(delay, "bunny_attack"));
+                    }
                     break;
 
                 case 2:
-                    bunnyAnimator.SetTrigger("bunny_flinch");
+                    if (delay == 0.0f) {
+                        bunnyAnimator.SetTrigger("bunny_flinch");
+                    } else {
+                        StartCoroutine(DelayAnimation(delay, "bunny_flinch"));
+                    }
                     break;
             }
         }
     }
 
-    public void Die()
+    private IEnumerator DelayAnimation(float delay, string animationName)
     {
+        yield return new WaitForSeconds(delay);
+        bunnyAnimator.SetTrigger(animationName);
+        yield return null;
+    }
 
+    public IEnumerator Die(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
+        yield return null;
     }
 }

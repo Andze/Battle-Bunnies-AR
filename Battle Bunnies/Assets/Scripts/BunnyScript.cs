@@ -4,9 +4,15 @@ using UnityEngine;
 
 public class BunnyScript : MonoBehaviour {
 
+    public bool canAttack = true;
 
-    public void Attack()
+    public void Spawn()
     {
-        gameObject.transform.localScale = new Vector3(2f,2f,2f);
+        //play animation of bunny breaking out of egg
     }
+    public void Special()
+    {
+        
+    }
+   
 }

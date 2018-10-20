@@ -8,20 +8,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -2067402452, guid: 8a9a760f95896c34689febc965510927, type: 3}
+  m_Script: {fileID: -2067402452, guid: bab6fa851cf5a1a4bba3cec5f191cb8e, type: 3}
   m_Name: VuforiaConfiguration
   m_EditorClassIdentifier: 
   vuforia:
     vuforiaLicenseKey: 
-    ufoLicenseKey: QVZxYmRCLy8vLy8vQUFBQUtOeEV6Lzc2cFVNQXVsRlp0STcvUVEwMlFFVXM4K05SMC9RR28wUUVKVFQ3aHdySk1Zb0JpcWdlUE5UakViQmpsUWsyTEx3dHZPTi9mcHJzaUhuSmREZkhWbVFMNTlnRkRpZW1YR2hvR3ZaWnFjYXZOYndhZmZVTytjekZHTWdLUW1VaXNSZVBGS2R3NW9XNkd2YitreEt0aHE5b3dVYTR2SmljbzVVVDljeFo3N1dudFAyVG5Rb2VRWHV5Ym1FSkFXVE9ieFpyc1h2MGZiWlRtbW9RUFNINUd0Q3ZRbjRtRmlVMDdMSkd6RjNHQU5sTTh1UVJjaTRoWkVxakVITmRYY3FtVlBTWmtoVXlzcmlYWDFkSExHT3gzUVdDUkdDYVY4ZkQ1bk9CaDNKZlVzSG9lM2lYempIWmZ6d24yTHlJaFRyQzRHQUJoRGNTV2pRSElNb0NpNnN2NWZhOENpdjRicnRrYm5TditJbWQ=
+    ufoLicenseKey: QVJBYWVLSC8vLy8vQUFBQUtPdnV4ekxwVzArN3JGRE50NHp2SVQrYUVGL0d2eGY4VCt4VVFhTXZ3T2x2K1NML0J4R1BWRTZSZkFpQ250aFA1Smg0TnV4NGtlejNCZE1yMlBmNVRBTUJFbkkwcTd0RGd1ZVk0alNzQWdXTFVWelVJOHpPVFJQU0YrdWRLS3BtYkVqRnZtMGliMGpwM0UrU20xV0FCeVQxVjRqRUZ4QVB4MTdEZW5ObFhsVTZueTF3VXdxNmExNTlFRVIyYitEd2UwK0xPM0xyUjdXa01nUkh3WitPU1dRSDF2bHNoZEkvR3NhNkt2ZUs5eXBLQm1PZExiSno5RWNaQjE4MnBzTURJajBVVHl6dllYYUd5RGtzYVlOcm9KNVJtckNpbWRCS2p0Q002MDRNVENWMVk4UURlb0x1NUk3b2JuZUR6UWU1YkIvRisvQW9HL2xMMnBpaGgwM0xkT2VmUG1XL3gwZEZJWGdQNjNXNmFPZCs=
     delayedInitialization: 0
     cameraDeviceModeSetting: -1
-    maxSimultaneousImageTargets: 4
+    maxSimultaneousImageTargets: 1
     maxSimultaneousObjectTargets: 1
     useDelayedLoadingObjectTargets: 0
     cameraDirection: 0
     mirrorVideoBackground: 0
-    version: 7.5.10
+    version: 7.5.26
     eulaAcceptedVersions: '{"Values":["7.2","7.5"]}'
   digitalEyewear:
     cameraOffset: 0.06
@@ -49,12 +49,12 @@ MonoBehaviour:
     numDivisions: 2
     videoBackgroundShader: {fileID: 4800000, guid: f40623b353e2f1943b1b3ba42975db7a,
       type: 3}
-    matteShader: {fileID: 15310, guid: 0000000000000000f000000000000000, type: 0}
+    matteShader: {fileID: 4800000, guid: 66d0d78a3000021448b598bb54a3bfdf, type: 3}
     videoBackgroundEnabled: 1
   deviceTracker:
     autoInitTracker: 0
     autoStartTracker: 0
-    trackingMode: 0
+    trackingMode: 1
     posePrediction: 0
     modelCorrectionMode: 0
     modelTransformEnabled: 0
